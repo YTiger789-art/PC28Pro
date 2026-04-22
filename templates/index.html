@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>PC28 数据展示</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
+</head>
+<body>
+<svg aria-hidden="true" class="icon-sprite">
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 7v5l3 2"></path>
+    </symbol>
+    <symbol id="icon-bolt" viewBox="0 0 24 24">
+        <path d="M13 2L5 14h6l-1 8 8-12h-6l1-8z"></path>
+    </symbol>
+    <symbol id="icon-grid" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="6" height="6" rx="1"></rect>
+        <rect x="14" y="4" width="6" height="6" rx="1"></rect>
+        <rect x="4" y="14" width="6" height="6" rx="1"></rect>
+        <rect x="14" y="14" width="6" height="6" rx="1"></rect>
+    </symbol>
+    <symbol id="icon-list" viewBox="0 0 24 24">
+        <path d="M9 6h11M9 12h11M9 18h11"></path>
+        <circle cx="4" cy="6" r="1.5"></circle>
+        <circle cx="4" cy="12" r="1.5"></circle>
+        <circle cx="4" cy="18" r="1.5"></circle>
+    </symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24">
+        <path d="M4 19h16"></path>
+        <rect x="5" y="11" width="3" height="6" rx="1"></rect>
+        <rect x="10.5" y="8" width="3" height="9" rx="1"></rect>
+        <rect x="16" y="5" width="3" height="12" rx="1"></rect>
+    </symbol>
+    <symbol id="icon-target" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8"></circle>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="12" cy="12" r="1.5"></circle>
+    </symbol>
+    <symbol id="icon-fire" viewBox="0 0 24 24">
+        <path d="M12 3s-2.5 3-2.5 6a2.5 2.5 0 0 0 5 0C14.5 6 12 3 12 3z"></path>
+        <path d="M8 11.5C6.5 13 6 14.5 6 16a6 6 0 1 0 12 0c0-1.5-.5-3-2-4.5"></path>
+    </symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3.5"></circle>
+        <path d="M12 4V2M12 22v-2M4 12H2M22 12h-2M6.5 6.5L5 5M19 19l-1.5-1.5M6.5 17.5 5 19M19 5l-1.5 1.5"></path>
+    </symbol>
+    <symbol id="icon-resize" viewBox="0 0 24 24">
+        <path d="M9 3H5a2 2 0 0 0-2 2v4M15 3h4a2 2 0 0 1 2 2v4M3 15v4a2 2 0 0 0 2 2h4M21 15v4a2 2 0 0 1-2 2h-4"></path>
+    </symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24">
+        <path d="M12 3 5 6v6c0 4.418 3.134 6.93 7 9 3.866-2.07 7-4.582 7-9V6l-7-3z"></path>
+        <path d="M10 11.5 11.5 13 15 9.5"></path>
+    </symbol>
+    <symbol id="icon-filter" viewBox="0 0 24 24">
+        <path d="M4 5h16l-6 7v4l-4 3v-7L4 5z"></path>
+    </symbol>
+    <symbol id="icon-stats" viewBox="0 0 24 24">
+        <path d="M4 19h16"></path>
+        <path d="M7 16V9"></path>
+        <path d="M12 16V5"></path>
+        <path d="M17 16v-7"></path>
+    </symbol>
+    <symbol id="icon-activity" viewBox="0 0 24 24">
+        <path d="M3 12h3l3 7 4-14 3 7h5"></path>
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="9" r="3"></circle>
+        <path d="M6 19a6 6 0 0 1 12 0"></path>
+    </symbol>
+</svg>
+
+<div class="page">
+    <div class="page-header">
+        <img class="logo" src="{{ url_for('static', filename='favicon.ico') }}" alt="PC28 Logo">
+        <h1>PC28</h1>
+    </div>
+    <div class="ad-banner">
+        <img src="{{ url_for('static', filename='c7.PNG') }}" alt="C7娱乐">
+    </div>
+    <div class="info-cards">
+        <!-- 公告卡片 -->
+        <div class="info-card announcement-card">
+            <div class="info-card-header">
+                <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span class="info-card-title">重要公告</span>
+            </div>
+            <div class="info-card-content">
+                本页面只做开奖数据与 Keno 源数据展示，不提供任何投注或资金相关功能。
+            </div>
+        </div>
+
+        <!-- 游戏规则卡片 -->
+        <div class="info-card rules-card">
+            <div class="info-card-header">
+                <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span class="info-card-title">游戏规则</span>
+            </div>
+            <div class="info-card-content">
+                加拿大 PC28 基于加拿大彩票公司 BCLC 的 Keno 开奖数据，通过特定算法计算出 00-27 范围内的特码结果。
+            </div>
+        </div>
+
+        <!-- 开奖时间卡片 -->
+        <div class="info-card time-card">
+            <div class="info-card-header">
+                <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+                <span class="info-card-title">开奖时间</span>
+            </div>
+            <div class="info-card-content">
+                <div class="time-item">
+                    <span class="time-label">夏令时</span>
+                    <span class="time-value">20:00 - 次日 19:00（北京时间）</span>
+                </div>
+                <div class="time-item">
+                    <span class="time-label">冬令时</span>
+                    <span class="time-value">21:00 - 次日 20:00（北京时间）</span>
+                </div>
+                <div class="time-item">
+                    <span class="time-label">开奖频率</span>
+                    <span class="time-value">每 3.5 分钟一期，每天 395 期</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-bar">
+        <div class="dot"></div>
+        <svg class="status-icon" aria-hidden="true">
+            <use href="#icon-clock"></use>
+        </svg>
+        <span id="last-update">正在加载数据...</span>
+        <div class="view-toggle">
+            <button id="btn-view-kj" class="toggle-btn toggle-btn-active">
+                <span class="btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-bolt"></use>
+                    </svg>
+                </span>
+                <span>最新开奖</span>
+            </button>
+            <button id="btn-view-keno" class="toggle-btn">
+                <span class="btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-grid"></use>
+                    </svg>
+                </span>
+                <span>Keno 源数据</span>
+            </button>
+            <button id="btn-view-yl" class="toggle-btn">
+                <span class="btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-filter"></use>
+                    </svg>
+                </span>
+                <span>遗漏统计</span>
+            </button>
+            <button id="btn-view-yk" class="toggle-btn">
+                <span class="btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-chart"></use>
+                    </svg>
+                </span>
+                <span>已开统计</span>
+            </button>
+            <button id="btn-view-predict" class="toggle-btn">
+                <span class="btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-target"></use>
+                    </svg>
+                </span>
+                <span>预测开奖</span>
+            </button>
+            <button id="btn-view-dragon" class="toggle-btn">
+                <span class="btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-fire"></use>
+                    </svg>
+                </span>
+                <span>长龙数据</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card" id="card-kj">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">最新开奖</div>
+                    <div class="card-desc">展示最近若干期 PC28 开奖结果（期号、时间、号码、组合）。</div>
+                </div>
+                <span class="badge badge-sky">/api/kj</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>期号</th>
+                        <th>时间</th>
+                        <th>特码</th>
+                        <th>组合</th>
+                    </tr>
+                    </thead>
+                    <tbody id="kj-body">
+                    </tbody>
+                </table>
+            </div>
+            <div id="kj-status" class="loading"></div>
+        </div>
+
+        <div class="card hidden" id="card-keno">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Keno 源数据</div>
+                    <div class="card-desc">对应期号的 20 个 Keno 原始号码，按 A/B/C 三组展示，并给出和值、大小、单双。</div>
+                </div>
+                <span class="badge badge-green">/api/keno</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>期号</th>
+                        <th>20 个号码（A/B/C 三组）</th>
+                        <th>统计</th>
+                    </tr>
+                    </thead>
+                    <tbody id="keno-body">
+                    </tbody>
+                </table>
+            </div>
+            <div id="keno-status" class="loading"></div>
+        </div>
+
+        <div class="card hidden" id="card-yl">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">遗漏统计</div>
+                    <div class="card-desc">展示 PC28 官方遗漏统计接口数据（各号码及大小/单双的遗漏期数）。</div>
+                </div>
+                <span class="badge badge-red">/api/yl</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>类别</th>
+                        <th>内容</th>
+                    </tr>
+                    </thead>
+                    <tbody id="yl-body">
+                    </tbody>
+                </table>
+            </div>
+            <div id="yl-status" class="loading"></div>
+        </div>
+
+        <div class="card hidden" id="card-yk">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">已开统计</div>
+                    <div class="card-desc">展示 PC28 官方已开统计接口数据（各号码及大小/单双的已开次数和占比）。</div>
+                </div>
+                <span class="badge badge-sky">/api/yk</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>类别</th>
+                        <th>内容</th>
+                    </tr>
+                    </thead>
+                    <tbody id="yk-body">
+                    </tbody>
+                </table>
+            </div>
+            <div id="yk-status" class="loading"></div>
+        </div>
+
+        <div class="card hidden" id="card-predict">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">预测开奖</div>
+                    <div class="card-desc">
+                        展示 PC28 官方预测相关接口数据（单双 / 大小 / 双组 / 杀组），仅作数据展示，不构成任何投注建议。
+                    </div>
+                </div>
+            </div>
+
+            <div class="predict-sub-toggle">
+                <button id="sub-predict-ds" class="predict-sub-btn predict-sub-btn-active">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-sun"></use>
+                        </svg>
+                    </span>
+                    <span>单双预测</span>
+                    <span class="badge badge-green">/api/ds</span>
+                </button>
+                <button id="sub-predict-dx" class="predict-sub-btn">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-resize"></use>
+                        </svg>
+                    </span>
+                    <span>大小预测</span>
+                    <span class="badge badge-sky">/api/dx</span>
+                </button>
+                <button id="sub-predict-sz" class="predict-sub-btn">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-shield"></use>
+                        </svg>
+                    </span>
+                    <span>双组预测</span>
+                    <span class="badge badge-red">/api/sz</span>
+                </button>
+                <button id="sub-predict-sha" class="predict-sub-btn">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-filter"></use>
+                        </svg>
+                    </span>
+                    <span>杀组预测</span>
+                    <span class="badge badge-green">/api/sha</span>
+                </button>
+            </div>
+
+            <div class="predict-hit-rate" id="predict-hit-rate">
+                当前命中率：-
+            </div>
+
+            <div class="predict-panels">
+                <div class="predict-panel" id="panel-ds">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>期号</th>
+                                <th>预测</th>
+                                <th>号码</th>
+                                <th>结果</th>
+                                <th>命中</th>
+                            </tr>
+                            </thead>
+                            <tbody id="ds-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="ds-status" class="loading"></div>
+                </div>
+
+                <div class="predict-panel hidden" id="panel-dx">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>期号</th>
+                                <th>预测</th>
+                                <th>号码</th>
+                                <th>结果</th>
+                                <th>命中</th>
+                            </tr>
+                            </thead>
+                            <tbody id="dx-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="dx-status" class="loading"></div>
+                </div>
+
+                <div class="predict-panel hidden" id="panel-sz">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>期号</th>
+                                <th>预测</th>
+                                <th>号码</th>
+                                <th>结果</th>
+                                <th>命中</th>
+                            </tr>
+                            </thead>
+                            <tbody id="sz-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="sz-status" class="loading"></div>
+                </div>
+
+                <div class="predict-panel hidden" id="panel-sha">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>期号</th>
+                                <th>预测</th>
+                                <th>号码</th>
+                                <th>结果</th>
+                                <th>命中</th>
+                            </tr>
+                            </thead>
+                            <tbody id="sha-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="sha-status" class="loading"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card hidden" id="card-dragon">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">长龙数据</div>
+                    <div class="card-desc">
+                        展示 PC28 官方长龙监控接口数据（循环长龙 / 交替长龙 / ABB循环 / 赔率循环），仅作数据展示，不构成任何投注建议。
+                    </div>
+                </div>
+            </div>
+
+            <div class="predict-sub-toggle">
+                <button id="sub-dragon-xh" class="predict-sub-btn predict-sub-btn-active">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-activity"></use>
+                        </svg>
+                    </span>
+                    <span>循环长龙</span>
+                    <span class="badge badge-green">/api/xh</span>
+                </button>
+                <button id="sub-dragon-jt" class="predict-sub-btn">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-target"></use>
+                        </svg>
+                    </span>
+                    <span>交替长龙</span>
+                    <span class="badge badge-sky">/api/jt</span>
+                </button>
+                <button id="sub-dragon-abb" class="predict-sub-btn">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-grid"></use>
+                        </svg>
+                    </span>
+                    <span>ABB循环</span>
+                    <span class="badge badge-red">/api/abb</span>
+                </button>
+                <button id="sub-dragon-pl" class="predict-sub-btn">
+                    <span class="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <use href="#icon-stats"></use>
+                        </svg>
+                    </span>
+                    <span>赔率循环</span>
+                    <span class="badge badge-green">/api/pl</span>
+                </button>
+            </div>
+
+            <div class="predict-panels">
+                <div class="predict-panel" id="panel-xh">
+                    <div class="dragon-grid" id="xh-body">
+                    </div>
+                    <div id="xh-status" class="loading"></div>
+                </div>
+
+                <div class="predict-panel hidden" id="panel-jt">
+                    <div class="dragon-grid" id="jt-body">
+                    </div>
+                    <div id="jt-status" class="loading"></div>
+                </div>
+
+                <div class="predict-panel hidden" id="panel-abb">
+                    <div class="dragon-grid" id="abb-body">
+                    </div>
+                    <div id="abb-status" class="loading"></div>
+                </div>
+
+                <div class="predict-panel hidden" id="panel-pl">
+                    <div class="dragon-grid" id="pl-body">
+                    </div>
+                    <div id="pl-status" class="loading"></div>
+                </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-left">
+            © {{ 2026 }} PC28 数据展示，仅供数据参考，不构成任何投资建议。
+        </div>
+        <div class="footer-right">
+            <span>
+                <span class="footer-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-activity"></use>
+                    </svg>
+                </span>
+                最近活跃访客：<strong id="stats-recent-active">-</strong> 人
+            </span>
+            <span>
+                <span class="footer-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-user"></use>
+                    </svg>
+                </span>
+                今日访问人数：<strong id="stats-today-uv">-</strong> 人
+            </span>
+            <span>
+                <span class="footer-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-chart"></use>
+                    </svg>
+                </span>
+                今日访问量：<strong id="stats-today-pv">-</strong>
+            </span>
+            <span>
+                <span class="footer-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-chart"></use>
+                    </svg>
+                </span>
+                昨日访问量：<strong id="stats-yesterday-pv">-</strong>
+            </span>
+            <span>
+                <span class="footer-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <use href="#icon-stats"></use>
+                    </svg>
+                </span>
+                总访问量：<strong id="stats-total-pv">-</strong>
+            </span>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
+
