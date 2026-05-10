@@ -49,8 +49,8 @@ def add_no_cache(response):
         response.headers['Expires'] = '-1'
     return response
 
-BASE_URL = "https://pc28.ai"
-# BASE_URL = "https://pc28.help"
+BASE_URL = "https://pc28.help"
+# BASE_URL = "https://pc28.ai"
 # 接口本身响应较慢，curl 实测通常在 4~6 秒左右，
 # 为了减少 Read timed out 的情况，这里把超时放宽到 15 秒
 REQUEST_TIMEOUT = 15
@@ -59,7 +59,7 @@ REQUEST_TIMEOUT = 15
 @app.route("/api/kj")
 def proxy_kj():
     """
-    代理 pc28.ai 开奖数据接口 /api/kj.json
+    代理 pc28.help 开奖数据接口 /api/kj.json
     这里只做数据转发，不做任何投注逻辑。
     """
     try:
@@ -80,7 +80,7 @@ def proxy_kj():
 @app.route("/api/keno")
 def proxy_keno():
     """
-    代理 pc28.ai Keno 源数据接口 /api/keno.json
+    代理 pc28.help Keno 源数据接口 /api/keno.json
     """
     try:
         # 与开奖接口保持一致，这里也固定取最近 20 期
@@ -100,7 +100,7 @@ def proxy_keno():
 @app.route("/api/yl")
 def proxy_yl():
     """
-    代理 pc28.ai 遗漏统计接口 /api/yl.json
+    代理 pc28.help 遗漏统计接口 /api/yl.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -119,7 +119,7 @@ def proxy_yl():
 @app.route("/api/yk")
 def proxy_yk():
     """
-    代理 pc28.ai 已开统计接口 /api/yk.json
+    代理 pc28.help 已开统计接口 /api/yk.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -138,7 +138,7 @@ def proxy_yk():
 @app.route("/api/ds")
 def proxy_ds():
     """
-    代理 pc28.ai 单双预测接口 /api/ds.json
+    代理 pc28.help 单双预测接口 /api/ds.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -157,7 +157,7 @@ def proxy_ds():
 @app.route("/api/dx")
 def proxy_dx():
     """
-    代理 pc28.ai 大小预测接口 /api/dx.json
+    代理 pc28.help 大小预测接口 /api/dx.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -176,7 +176,7 @@ def proxy_dx():
 @app.route("/api/sz")
 def proxy_sz():
     """
-    代理 pc28.ai 双组预测接口 /api/sz.json
+    代理 pc28.help 双组预测接口 /api/sz.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -195,7 +195,7 @@ def proxy_sz():
 @app.route("/api/sha")
 def proxy_sha():
     """
-    代理 pc28.ai 杀组预测接口 /api/sha.json
+    代理 pc28.help 杀组预测接口 /api/sha.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -214,7 +214,7 @@ def proxy_sha():
 @app.route("/api/xh")
 def proxy_xh():
     """
-    代理 pc28.ai 循环长龙接口 /api/xh.json
+    代理 pc28.help 循环长龙接口 /api/xh.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -233,7 +233,7 @@ def proxy_xh():
 @app.route("/api/jt")
 def proxy_jt():
     """
-    代理 pc28.ai 交替长龙接口 /api/jt.json
+    代理 pc28.help 交替长龙接口 /api/jt.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -252,7 +252,7 @@ def proxy_jt():
 @app.route("/api/abb")
 def proxy_abb():
     """
-    代理 pc28.ai ABB循环接口 /api/abb.json
+    代理 pc28.help ABB循环接口 /api/abb.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
@@ -271,7 +271,7 @@ def proxy_abb():
 @app.route("/api/pl")
 def proxy_pl():
     """
-    代理 pc28.ai 赔率循环接口 /api/pl.json
+    代理 pc28.help 赔率循环接口 /api/pl.json
     这里只做数据转发，不做任何投注或资金相关逻辑。
     """
     try:
