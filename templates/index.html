@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>PC28 数据展示</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
 </head>
 <body>
@@ -138,6 +139,11 @@
             <use href="#icon-clock"></use>
         </svg>
         <span id="last-update">正在加载数据...</span>
+        <span class="status-sep">|</span>
+        <span id="current-issue">当前期号：--</span>
+        <span class="status-sep">|</span>
+        <span id="draw-countdown">开奖倒计时：--:--</span>
+        <button id="btn-manual-refresh" class="mini-refresh-btn" type="button">立即刷新</button>
         <div class="view-toggle">
             <button id="btn-view-kj" class="toggle-btn toggle-btn-active">
                 <span class="btn-icon" aria-hidden="true">
