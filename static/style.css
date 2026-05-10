@@ -136,10 +136,24 @@ h1 {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    /* 整体页面在移动端缩放到 75% */
     .page {
-        transform: scale(0.75);
-        transform-origin: top center;
+        padding: 14px 10px 24px;
+    }
+
+    .status-bar {
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    .mini-refresh-btn {
+        margin-left: auto;
+    }
+
+    .view-toggle {
+        width: 100%;
+        margin-left: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .info-cards {
@@ -273,6 +287,27 @@ tbody tr:nth-child(even) {
     width: 16px;
     height: 16px;
     opacity: 0.7;
+}
+
+.status-sep {
+    opacity: 0.4;
+    padding: 0 2px;
+}
+
+
+.mini-refresh-btn {
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: rgba(15, 23, 42, 0.8);
+    color: #cbd5e1;
+    border-radius: 999px;
+    font-size: 11px;
+    padding: 2px 10px;
+    cursor: pointer;
+}
+
+.mini-refresh-btn:hover {
+    color: #fff;
+    border-color: rgba(125, 211, 252, 0.8);
 }
 
 .view-toggle {

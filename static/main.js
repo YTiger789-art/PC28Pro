@@ -447,12 +447,23 @@ function renderPredictionStructured(tbodyId, data, defaultPredictLabel) {
             pickField(item, ['predict', 'forecast', 'type', 'direction', 'plan']) ||
             defaultPredictLabel;
 
-        // 预测期号的「号码」和「结果」按需求固定展示
-        const number = '待开奖';
-        const result = '-';
+        // 优先展示接口返回的真实号码/结果，缺失时再降级展示
+        const numberRaw = pickField(item, [
+            'number', 'num', 'open_number', 'openNumber', 'code', 'kj', 'result_num', 'resultNumber',
+        ]);
+        const resultRaw = pickField(item, [
+            'result', 'status', 'outcome', 'open_result', 'openResult', 'hit_result', 'remark',
+        ]);
+
+        const number = numberRaw || '-';
+        let result = resultRaw || '-';
 
         const hitRaw = pickField(item, ['hit', 'is_hit', 'win', 'isWin', 'match', 'success']);
         const state = hitState(hitRaw);
+        if (result === '-') {
+            if (state === 'hit') result = '命中';
+            if (state === 'miss') result = '未命中';
+        }
 
         let hitHtml = '-';
         if (state === 'hit') {
@@ -623,6 +634,65 @@ function renderPl(data) {
 }
 
 // 轮询相关：间隔时间（毫秒），当前是否在加载中
+
+let nextDrawAt = null;
+let countdownTimer = null;
+let latestIssue = null;
+let autoRefreshTriggeredAt = null;
+
+function parseApiTimeToDate(timeText) {
+    if (!timeText) return null;
+    const now = new Date();
+    const t = String(timeText).trim();
+
+    const hm = t.match(/^(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$/);
+    if (hm) {
+        const d = new Date(now);
+        d.setHours(parseInt(hm[1], 10), parseInt(hm[2], 10), parseInt(hm[3] || '0', 10), 0);
+        if (d.getTime() - now.getTime() > 12 * 3600 * 1000) d.setDate(d.getDate() - 1);
+        if (now.getTime() - d.getTime() > 12 * 3600 * 1000) d.setDate(d.getDate() + 1);
+        return d;
+    }
+
+    const normalized = t.replace(/-/g, '/');
+    const dt = new Date(normalized);
+    return Number.isNaN(dt.getTime()) ? null : dt;
+}
+
+function updateIssueAndCountdown(kjData) {
+    const issueEl = document.getElementById('current-issue');
+    const countdownEl = document.getElementById('draw-countdown');
+    const list = kjData?.data || kjData || [];
+    const latest = Array.isArray(list) && list.length ? list[0] : null;
+    if (latest?.nbr) latestIssue = latest.nbr;
+    if (issueEl) issueEl.textContent = `当前期号：${latestIssue ?? '--'}`;
+
+    const baseTime = parseApiTimeToDate(latest?.time);
+    if (baseTime) {
+        nextDrawAt = new Date(baseTime.getTime() + 210000);
+    }
+    if (!countdownEl) return;
+
+    if (!nextDrawAt) {
+        countdownEl.textContent = '开奖倒计时：--:--';
+        return;
+    }
+    const diff = Math.max(0, nextDrawAt.getTime() - Date.now());
+    const totalSec = Math.floor(diff / 1000);
+    const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+    const ss = String(totalSec % 60).padStart(2, '0');
+    countdownEl.textContent = `开奖倒计时：${mm}:${ss}`;
+
+    if (diff <= 1000 && !isLoading) {
+        const now = Date.now();
+        if (!autoRefreshTriggeredAt || now - autoRefreshTriggeredAt > 15000) {
+            autoRefreshTriggeredAt = now;
+            nextDrawAt = new Date(nextDrawAt.getTime() + 210000);
+            loadData();
+        }
+    }
+}
+
 const POLL_INTERVAL_MS = 30000; // 每 30 秒自动刷新一次
 let isLoading = false;
 
@@ -699,6 +769,7 @@ async function loadData() {
         loadStats();
 
         renderKj(kj);
+        updateIssueAndCountdown(kj);
         renderKeno(keno);
         renderYl(yl);
         renderYk(yk);
@@ -931,11 +1002,27 @@ function setupDragonSubToggle() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    const manualRefreshBtn = document.getElementById('btn-manual-refresh');
+    if (manualRefreshBtn) {
+        manualRefreshBtn.addEventListener('click', () => {
+            loadData();
+            loadStats();
+        });
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            loadData();
+            loadStats();
+        }
+    });
     loadData();
     loadStats();
     setupViewToggle();
     setupPredictSubToggle();
     setupDragonSubToggle();
+
+    countdownTimer = setInterval(() => updateIssueAndCountdown(null), 1000);
     // 启动定时轮询
     setInterval(loadData, POLL_INTERVAL_MS);
     setInterval(loadStats, POLL_INTERVAL_MS);
